@@ -7,7 +7,13 @@ project(PhysBAM)
 set(CMAKE_BUILD_TYPE "Release" CACHE STRING "For single-configuration generators (e.g. make) set the type of build: Release, Debug, RelWithDebugInfo, MinSizeRel")
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Release" "Debug" "RelWithDebugInfo" "MinSizeRel")
 
+message("${PhysBAM_BINARY_DIR}")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PhysBAM_BINARY_DIR}/lib")
 option(BUILD_SHARED_LIBS "Build as shared libraries by default" ON)
+
+if (CMAKE_COMPILER_IS_GNUCC AND GCC_VERSION VERSION_GREATER 4.5)
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
+endif()
 
 set(PhysBAM_PL_DIR "${CMAKE_SOURCE_DIR}/Public_Library" CACHE PATH "Path to the PhysBAM Public_Library directory")
 
@@ -54,4 +60,10 @@ include_directories(${PhysBAM_PL_DIR})
 add_library(PhysBAM_Tools ${PhysBAM_Tools_SOURCE} ${PhysBAM_Tools_HEADER})
 add_library(PhysBAM_Geometry ${PhysBAM_Geometry_SOURCE} ${PhysBAM_Geometry_HEADER})
 add_library(PhysBAM_Rendering ${PhysBAM_Rendering_SOURCE} ${PhysBAM_Rendering_HEADER})
+
 target_link_libraries(PhysBAM_Geometry PhysBAM_Tools)
+target_link_libraries(PhysBAM_Rendering PhysBAM_Tools)
+
+file(COPY ${PhysBAM_Tools_DIR} ${PhysBAM_Geometry_DIR} ${PhysBAM_Rendering_DIR}
+		DESTINATION ${PhysBAM_BINARY_DIR}/include
+		FILES_MATCHING PATTERN "*.h" )
