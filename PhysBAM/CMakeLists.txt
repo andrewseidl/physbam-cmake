@@ -28,8 +28,8 @@ file(GLOB_RECURSE PhysBAM_Tools_HEADER "${PhysBAM_Tools_DIR}/*.h")
 file(GLOB_RECURSE PhysBAM_Geometry_SOURCE "${PhysBAM_Geometry_DIR}/*.cpp")
 file(GLOB_RECURSE PhysBAM_Geometry_HEADER "${PhysBAM_Geometry_DIR}/*.h")
 
-file(GLOB_RECURSE PhysBAM_OpenGL_SOURCE "${PhysBAM_Geometry_DIR}/*.cpp")
-file(GLOB_RECURSE PhysBAM_OpenGL_HEADER "${PhysBAM_Geometry_DIR}/*.h")
+file(GLOB_RECURSE PhysBAM_OpenGL_SOURCE "${PhysBAM_OpenGL_DIR}/*.cpp")
+file(GLOB_RECURSE PhysBAM_OpenGL_HEADER "${PhysBAM_OpenGL_DIR}/*.h")
 
 option(PHYSBAM_USE_DOUBLE   "Turn ON to enable double support"  OFF )
 option(PHYSBAM_USE_DYADIC   "Turn ON to enable dyadic support"  OFF )
@@ -86,8 +86,12 @@ add_library(PhysBAM_Tools ${PhysBAM_Tools_SOURCE} ${PhysBAM_Tools_HEADER})
 add_library(PhysBAM_Geometry ${PhysBAM_Geometry_SOURCE} ${PhysBAM_Geometry_HEADER})
 add_library(PhysBAM_OpenGL ${PhysBAM_OpenGL_SOURCE} ${PhysBAM_OpenGL_HEADER})
 
+FIND_PACKAGE(OpenGL)
+FIND_PACKAGE(GLUT)
+
 target_link_libraries(PhysBAM_Geometry PhysBAM_Tools)
-target_link_libraries(PhysBAM_OpenGL PhysBAM_Tools)
+target_link_libraries(PhysBAM_OpenGL PhysBAM_Tools ${OPENGL_LIBRARIES}
+		${GLUT_LIBRARY})
 
 file(COPY ${PhysBAM_Tools_DIR} ${PhysBAM_Geometry_DIR} ${PhysBAM_OpenGL_DIR}
 		DESTINATION ${PhysBAM_BINARY_DIR}/include
