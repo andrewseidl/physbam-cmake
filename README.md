@@ -1,3 +1,5 @@
+An up-to-date version is now maintained by Hammad Mazhar at https://github.com/hmazhar/physbam_public
+
 physbam-cmake
 =============
 
